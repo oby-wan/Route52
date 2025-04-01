@@ -1,0 +1,132 @@
+!
+upgrade fpd auto
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!         
+no cdp log mismatch duplex
+!
+ip tcp synwait-time 5
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ bandwidth 100000
+ ip address 11.14.1.2 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication Cisco123
+ ip nhrp network-id 1
+ ip nhrp nhs 11.14.1.1 nbma 151.14.1.1 multicast
+ ip nhrp registration no-unique
+ ip nhrp shortcut
+ ip tcp adjust-mss 1360
+ ipv6 address 2001:11:14:1::2/64
+ ipv6 mtu 1400
+ ipv6 tcp adjust-mss 1360
+ ipv6 nhrp authentication Cisco123
+ ipv6 nhrp network-id 1
+ ipv6 nhrp nhs 2001:11:14:1::1 nbma 151.14.1.1 multicast
+ ipv6 nhrp shortcut
+ tunnel source FastEthernet0/0
+ tunnel mode gre multipoint
+!
+interface FastEthernet0/0
+ ip address dhcp
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+! R2
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!         
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
