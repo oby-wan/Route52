@@ -1,3 +1,4 @@
+
 !
 upgrade fpd auto
 version 15.5
@@ -11,20 +12,10 @@ boot-start-marker
 boot-end-marker
 !
 !
-!
 no aaa new-model
 bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
 !
-!
-!
-!
-!
 no ip icmp rate-limit unreachable
-!
-!
-!
-!
-!
 !
 no ip domain lookup
 ip cef
@@ -32,30 +23,11 @@ no ipv6 cef
 !
 multilink bundle-name authenticated
 !
-!
-!
-!
-!
-!
-!
-!
-!
-!
 redundancy
 !         
 no cdp log mismatch duplex
 !
 ip tcp synwait-time 5
-! 
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface Ethernet0/0
  no ip address
@@ -73,18 +45,18 @@ interface GigabitEthernet1/0
  ip address dhcp
  negotiation auto
 !
-ip forward-protocol nd
+! OSPF Configuration
+router ospf 14
+ router-id 1.1.1.1
+ network 151.14.255.0 0.0.0.255 area 14
+ network 151.14.1.0 0.0.0.255 area 14
+ network 172.14.0.0 0.0.0.255 area 14
+ passive-interface GigabitEthernet1/0
+!
 no ip http server
 no ip http secure-server
 !
-!
-ip route 151.14.0.0 255.255.0.0 GigabitEthernet0/0
-!
-!
-!
-!
 control-plane
-!
 !
 mgcp behavior rsip-range tgcp-only
 mgcp behavior comedia-role none
@@ -93,12 +65,8 @@ mgcp behavior comedia-sdp-force disable
 !
 mgcp profile default
 !
-!
-!
-!
 gatekeeper
  shutdown
-!
 !
 line con 0
  exec-timeout 0 0
@@ -114,6 +82,4 @@ line vty 0 4
  login    
  transport input none
 !
-!
 end
-
